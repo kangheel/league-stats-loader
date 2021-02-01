@@ -18,32 +18,37 @@ public class stats_loader {
         }
         if (champion_name.toLowerCase().equals("reksai")) champion_name = "Rek'Sai";
 
-        String url = "https://leagueoflegends.fandom.com/wiki/"+champion_name;
-        Document document = Jsoup.connect(url).get();
+        if (champion_name.toLowerCase().equals("udyr")) { 
 
-        String cooldowns = document.select("div.skill.skill_r").text();
-        
-        cooldowns = cooldowns.substring(cooldowns.indexOf("COOLDOWN:")+"COOLDOWN:".length(),cooldowns.indexOf("Active:"));
-        if (cooldowns.indexOf("Passive: ") != -1) {
-            cooldowns = cooldowns.substring(0,cooldowns.indexOf("Passive:"));
-        }
-
-        if (champion_name.indexOf("_") != -1) {
-            champion_name = champion_name.substring(0,1).toUpperCase()+champion_name.substring(1,champion_name.indexOf("_")).toLowerCase()+" "+champion_name.substring(champion_name.indexOf("_")+1,champion_name.indexOf("_")+2).toUpperCase()+champion_name.substring(champion_name.indexOf("_")+2).toLowerCase();
         }
         else {
-            champion_name = champion_name.substring(0,1).toUpperCase()+champion_name.substring(1).toLowerCase();
+            String url = "https://leagueoflegends.fandom.com/wiki/"+champion_name;
+            Document document = Jsoup.connect(url).get();
+    
+            String cooldowns = document.select("div.skill.skill_r").text();
+            
+            cooldowns = cooldowns.substring(cooldowns.indexOf("COOLDOWN:")+"COOLDOWN:".length(),cooldowns.indexOf("Active:"));
+            if (cooldowns.indexOf("Passive: ") != -1) {
+                cooldowns = cooldowns.substring(0,cooldowns.indexOf("Passive:"));
+            }
+    
+            if (champion_name.indexOf("_") != -1) {
+                champion_name = champion_name.substring(0,1).toUpperCase()+champion_name.substring(1,champion_name.indexOf("_")).toLowerCase()+" "+champion_name.substring(champion_name.indexOf("_")+1,champion_name.indexOf("_")+2).toUpperCase()+champion_name.substring(champion_name.indexOf("_")+2).toLowerCase();
+            }
+            else {
+                champion_name = champion_name.substring(0,1).toUpperCase()+champion_name.substring(1).toLowerCase();
+            }
+            fileExport.println(champion_name+": " + cooldowns);
+            fileExport.println("------------------------------------------");
+            fileExport.close();
+    
+            Scanner copyTemp = new Scanner(new File("Champion_Info_temp.txt"));
+            PrintWriter finalExport = new PrintWriter("Champion_Info.txt");
+            while (copyTemp.hasNextLine()) {
+                finalExport.println(copyTemp.nextLine());
+            }
+            finalExport.close();
+            ability_haste_calculations.main(cooldowns);
         }
-        fileExport.println(champion_name+": " + cooldowns);
-        fileExport.println("------------------------------------------");
-        fileExport.close();
-
-        Scanner copyTemp = new Scanner(new File("Champion_Info_temp.txt"));
-        PrintWriter finalExport = new PrintWriter("Champion_Info.txt");
-        while (copyTemp.hasNextLine()) {
-            finalExport.println(copyTemp.nextLine());
-        }
-        finalExport.close();
-        ability_haste_calculations.main(cooldowns);
     }
 }
