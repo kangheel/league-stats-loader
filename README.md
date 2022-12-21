@@ -1,7 +1,5 @@
 # League Stats Loader
 
-[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://github.com/Jaden-Lee/league-stats-loader)
-
 League Stats Loader is a program that allows you to access champions' Ultimate ability cooldowns during champ select.
 
 ### Features
